@@ -1,0 +1,136 @@
+---
+openapi: 3.0.0
+info:
+  title: Forage SDK Take Home Challenge Server
+  version: 1.0.0
+  description: |
+    Use this development server to create your SDK
+
+paths:
+  /api/payment_methods/:
+    parameters:
+      - $ref: '#/components/parameters/MerchantAccountHeader'
+      - $ref: '#/components/parameters/IdempotencyKeyHeader'
+    post:
+      tags:
+        - Payment Methods
+      summary: Create a payment method for single or repeated use.
+      description: |
+        This endpoint will return a tokenized payment method. The PaymentMethod object will be stripped of sensitive cardholder data. Use the object's ref to reference the payment instrument. You will need to store the ref on your platform and map it to the customer's account.
+
+        Refs are useful because they allow you to avoid storing or transmitting sensitive cardholder data on your own servers.
+
+      operationId: Create payment method
+      requestBody:
+        description: A PaymentMethod to add to or update on our system.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The payment method's card type.
+                  enum:
+                    - ebt
+                    - credit
+                    - debit
+                    - prepaid
+                  example: "ebt"
+                reusable:
+                  type: boolean
+                  description: Whether the payment method can be reused or only for a single transaction.
+                  example: true
+                number:
+                  type: string
+                  description: The card number without any separators.
+                  example: "1234567890123456"
+                  minLength: 16
+                  maxLength: 16
+      responses:
+        '200':
+          description: Successful payment method resource request.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: |
+                  This object represents a customer's payment instrument. It has been tokenized by the server. It does not include all details about the payment method.
+
+                  If the PaymentMethod has a type of 'ebt', then 'balance' field will be null until the /api/payment_methods/{ref}/ endpoint is called. Th balance field will always be null for non-EBT payment methods
+                properties:
+                  ref:
+                    type: string
+                    description: The payment methods unique identifier
+                    x-faker:
+                      random.alphaNumeric: [10]
+                    example: "ac47392bb1"
+                  type:
+                    type: string
+                    description: The payment method's card type.
+                    enum:
+                      - ebt
+                    example: "ebt"
+                  balance:
+                    type: object
+                    description: This object represents an EBT cardholder's account balance.
+                    properties:
+                      snap:
+                        type: string
+                        description: The SNAP balance left on the EBT card. Can only be spent on SNAP eligible items.
+                        x-faker: finance.amount
+                        example: "100.34"
+                      non_snap:
+                        type: string
+                        description: The EBT Cash balance left on the EBT card. Can be spent on just about anything per state regulations.
+                        x-faker: finance.amount
+                        example: "100.45"
+                      updated:
+                        type: string
+                        format: date-time
+                        description: The date-time this object was last modified.
+                        x-faker: datetype.datetime
+                        example: '2021-06-16T00:11:50.000000Z-07:00'
+                  card:
+                    type: object
+                    description: Responses to base card creation will include tokens from VGS.
+                    properties:
+                      last4:
+                        type: string
+                        description: The card number without any separators.
+                        x-faker:
+                          random.numeric: [4]
+                        example: "3456"
+                      type:
+                        type: string
+                        description: The type of the card
+                        enum:
+                          - ebt
+                        example: ebt
+                      token:
+                        type: string
+                        description: A token which allows Forage to lookup this EBT card in secure storage. Must be passed to the /capture endpoint to process an EBT card.
+                        x-faker:
+                          random.alphaNumeric: [32]
+                        example: 'tok_sandbox_12345678901234567890'
+components:
+  parameters:
+    MerchantAccountHeader:
+      name: Merchant-Account
+      in: header
+      description: Unique 7 digit FNS number for the merchant account.
+      schema:
+        type: string
+        minlength: 7
+        maxLength: 7
+      required: True
+      example: "1234567"
+    IdempotencyKeyHeader:
+      name: Idempotency-Key
+      in: header
+      description: An alphanumeric key which clients can use to identify repeated requests that are dropped in transit. You should generate a unique key for every unique request and only re-use keys for retries.
+      schema:
+        type: string
+        format: uuid
+      required: True
+...

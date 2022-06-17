@@ -1,0 +1,9 @@
+version: '3.0'
+services:
+  dev_server_api:
+    image: stoplight/prism
+    command: mock -h 0.0.0.0 -p 8080 -d /app/oas.yml
+    volumes:
+      - $PWD/oas.yml:/app/oas.yml
+    ports:
+      - "8080:8080"
