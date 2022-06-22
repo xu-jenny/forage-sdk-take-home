@@ -7,6 +7,7 @@
 1. Make sure you have docker compose installed
 1. From within this directory, run the following command to spin up the server: `docker compose up`
 1. This commmand will spin up one container:
+  
   1.1. `dev_server_api` is the development server. It will validate your requests, yield errors, and yield random successful request bodies. You can access it through `http://localhost:8080/`
 
 ### Option b: docker
