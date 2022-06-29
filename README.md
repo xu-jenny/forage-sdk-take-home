@@ -1,41 +1,46 @@
-# SDK Take Home Challenge
+# Getting Started with Create React App
 
-## Instructions
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-The goal is simple. Build an importable client-side library that helps a
-developer run operations against a remote server. It will allow you to
-understand the challenges we face at Forage and to demonstrate your skills.
+## Available Scripts
 
-1. The language will be determined by you and the hiring manager.
-1. Clone this repository.
-1. Complete the coding challenge.
-1. Push your code changes to a private repository hosted by you on github. 
-1. Email your hiring manager to invite them to your private repo and to schedule a code review.
-1. Do a live code review with the hiring manager(s). 
+In the project directory, you can run:
 
+### `npm start`
 
-### Required solution
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-1. Create a visual component that allows an end-user to enter their EBT card number and submit it to the remote server.
-1. Develop the component against the server that lives in `./server/`. You will find instruction on how to run the server in the file `./server/README.md`
-1. The component should be importable.
-1. The component should be mountable.
-1. The component should expose a method for submitting the card number to the remote server. This method should return "valuable" data to its caller.
-  1.1. We are purposefully leaving this ambiguous. We are curious to know how you approach this and we will ask you to explain your reasoning during the code review.
-1. Documentation on how to use the component.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-### Extra credit solutions
+### `npm test`
 
-1. Accompanying unit tests.
-1. The client library is installable via a popular package manager.
-1. The component accepts a callback function for validation errors.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### About the server
+### `npm run build`
 
-We have created a development server and included it in this repository. You can find it in the directory `./server/`. 
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## Prerequisites
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-- Docker
-- Docker Compose
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
