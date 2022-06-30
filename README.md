@@ -1,6 +1,15 @@
 # Usage instructions
 
+FormInput can be imported and used in any react application
+Props:
+`Variant` input field variant enum. Values: standard, outlined, 
+`Label` label for input field that appears 
+`Validator` validator function arg that executes after input is submitted. (String)->bool
 
+If not props are provided, these default values will be used
+inputVariant: InputVariant.STANDARD,
+label: 'Ebt card number',
+validator: (input: any) => input.length > 3,
 
 
 # Getting Started with Create React App
