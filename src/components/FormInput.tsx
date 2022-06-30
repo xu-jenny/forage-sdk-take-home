@@ -1,58 +1,56 @@
 import React, { useState } from "react";
 import { useForm } from "./useForm";
-import { PaymentResponse } from "../utils/types";
+import { PaymentResponse, InputVariant } from "../utils/types";
 import { postEndpoint } from "../utils/api";
-import PaymentResponseTable from "./PaymentResponse";
+import { useDispatch } from "react-redux";
+import { setBalance, setCard } from "../redux/paymentSlice";
+import { Button, TextField } from "@mui/material";
 
-const FormInput = () => {
+interface Props {
+    inputVariant?: InputVariant,
+    label?: string,
+    validator?: (...args: any[]) => boolean,
+}
+
+const FormInput: React.FC<Props> = (props) => {
+    const dispatch = useDispatch()
     const [input, setInput] = useState('')
-    const initialErrorFormState = {
-        inputIsValid: true,
-        errMsg: ''
-    };
-    let responseStateInitialVal: PaymentResponse = {
-        balance: {
-            non_snap: '',
-            snap: '',
-            updated: Date.now().toString(),
-        },
-        card: {
-            last4: '',
-            token: '',
-            type: null,
-        }
-    }
-    const [formState, setFormState] = useState(initialErrorFormState)
-    const [responseState, setResponseState] = useState(responseStateInitialVal);
+    const [formState, setFormState] = useState({inputValid: true, errMsg: '', acct: ''})
 
     const callback = async () => {
+        setFormState({...formState, inputValid: true, errMsg:''})
         let data: PaymentResponse = await postEndpoint(input);
-        setResponseState(data);
+        dispatch(setCard(data.card));
+        dispatch(setBalance(data.balance));
     }
 
     const { onChange, onSubmit } = useForm(
         callback,
         formState,
+        props.validator,
+        (msg: string) => setFormState({ ...formState, inputValid: false, errMsg: msg})
     );
 
     return (
         <form onSubmit={onSubmit}>
         <div>
-            <input
-                name='acct'
-                id='acct'
-                type='password'
-                placeholder='Password'
-                onChange={onChange}
-                required
-                />
-                <br />
-            {formState.inputIsValid ? <></>: <span color="red">{formState.errMsg}<br /></span>}
-            <button type='submit'>Submit</button>
-            <PaymentResponseTable balance={responseState.balance} card={responseState.card}/>
+            <TextField 
+                label={props.label} 
+                variant={props.inputVariant} 
+                onChange={onChange} name='acct' 
+                error={!formState.inputValid}
+                helperText={formState.inputValid ? '' : formState.errMsg}
+            />
+            <Button variant="contained" type='submit'>Submit</Button>
         </div>
         </form>
     );
 }
 
-export default FormInput;
+FormInput.defaultProps = {
+    inputVariant: InputVariant.STANDARD,
+    label: 'Ebt card number',
+    validator: (input: any) => input.length > 3,
+}
+
+export default FormInput;   

@@ -7,7 +7,8 @@ export const useForm = (submitCallback: any, initialState = {}, validator = (val
     };
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if(validator(values)){
+        //@ts-ignore
+        if(validator(values.acct)){
             await submitCallback(); 
         } else {
             errorCallback("Your input is invalid");

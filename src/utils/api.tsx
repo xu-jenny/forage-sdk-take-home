@@ -13,7 +13,7 @@ export const postEndpoint = async (account: string) => {
     const url = "http://0.0.0.0:8080/api/payment_methods/"
     const hashed = hash(account);
     const header : any = {
-        'merchant-account': hashed,
+        'merchant-account': '12345',
         'idempotency-key': uuidv4(),
     }
     const resp = await fetch(url, {

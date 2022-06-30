@@ -1,16 +1,25 @@
 import React from "react";
 
-export interface PaymentResponse {
-    balance: {
-        non_snap: string,
+export enum InputVariant {
+    OUTLINED = 'outlined',
+    FILLED = 'filled',
+    STANDARD = 'standard'
+}
+
+export interface PaymentCard {
+    last4: string,
+    token: string,
+    type: CardType | null,
+}
+export interface PaymentBalance {
+    non_snap: string,
         snap: string,
-        updated: string
-    },
-    card: {
-        last4: string,
-        token: string,
-        type: CardType | null,
-    }
+        updated: Date
+}
+
+export interface PaymentResponse {
+    balance: PaymentBalance,
+    card: PaymentCard
 }
 
 enum CardType {
